@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEON MAYHEM</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background: #050510;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  user-select: none;
+}
+
+h1 {
+  margin: 10px 0 3px;
+  color: #00f7ff;
+  text-shadow: 0 0 15px #00f7ff;
+  font-size: clamp(24px, 6vw, 36px);
+}
+
+.subtitle {
+  color: #ff00d4;
+  font-size: 10px;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+}
+
+#gameBox {
+  position: relative;
+  width: min(96vw, 480px);
+  margin: auto;
+  overflow: hidden;
+  border: 2px solid #00f7ff;
+  border-radius: 12px;
+  box-shadow: 0 0 22px #00f7ff55;
+}
+
+#game {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#hud {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  font-size: 11px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.panel {
+  background: #080817e8;
+  border: 1px solid #00f7ff;
+  border-radius: 7px;
+  padding: 7px;
+  line-height: 1.6;
+}
+
+#overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  background: #03030de8;
+}
+
+.card {
+  width: 100%;
+  max-width: 350px;
+  padding: 16px;
+  background: linear-gradient(145deg, #11112d, #260b32);
+  border: 2px solid #ff00d4;
+  border-radius: 15px;
+  box-shadow: 0 0 25px #ff00d455;
+}
+
+.card h2 {
+  color: #00f7ff;
+  margin: 0 0 8px;
+  text-shadow: 0 0 12px #00f7ff;
+}
+
+.card p {
+  color: #ddd;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+button {
+  padding: 11px;
+  color: white;
+  font-weight: bold;
+  background: #10152d;
+  border: 1px solid #00f7ff;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:active {
+  transform: scale(.96);
+}
+
+.mainBtn {
+  display: block;
+  width: 100%;
+  margin-top: 9px;
+  padding: 13px;
+  color: #050510;
+  background: linear-gradient(90deg, #00f7ff, #ff00d4);
+  border: none;
+  font-size: 14px;
+}
+
+#controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: min(96vw, 480px);
+  margin: 10px auto;
+}
+
+.controlBtn {
+  width: 75px;
+  height: 48px;
+  font-size: 23px;
+  padding: 0;
+  touch-action: none;
+}
+
+#nitroBtn {
+  flex: 1;
+  max-width: 150px;
+  background: linear-gradient(90deg, #501080, #bd006f);
+  border-color: #ff00d4;
+}
+
+#hint {
+  margin: 8px;
+  font-size: 10px;
+  color: #a4a4c7;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* GARASI */
+
+#garage {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background: #03030df5;
+  overflow-y: auto;
+}
+
+.garageCard {
+  width: min(100%, 390px);
+  padding: 14px;
+  border: 2px solid #00f7ff;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #10102b, #260b32);
+  box-shadow: 0 0 28px #00f7ff55;
+}
+
+.garageCard h2 {
+  color: #00f7ff;
+  margin: 0;
+}
+
+#motorName {
+  color: #ff00d4;
+  font-size: 19px;
+  font-weight: bold;
+  margin: 8px 0 4px;
+}
+
+#motorType {
+  color: #ffe66d;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+#motorPreview {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 8px auto;
+  border: 1px solid #ff00d4;
+  border-radius: 12px;
+  background: #080817;
+}
+
+#motorDescription {
+  min-height: 30px;
+  color: #ddd;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.garageButtons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.garageButtons button {
+  flex: 1;
+  font-size: 11px;
+  padding: 11px 4px;
+}
+
+.mapSelector {
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid #ff00d4;
+  border-radius: 12px;
+  background: #080817;
+}
+
+.mapSelector h3 {
+  margin: 0 0 7px;
+  color: #00f7ff;
+  font-size: 14px;
+}
+
+#mapName {
+  color: #ffe66d;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#mapDescription {
+  min-height: 28px;
+  margin-top: 5px;
+  color: #ddd;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+#backGarage {
+  margin-bottom: 2px;
+}
+
+@media (max-height: 760px) {
+  .garageCard {
+    padding: 9px;
+  }
+
+  #motorPreview {
+    max-width: 250px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏍️ NEON MAYHEM</h1>
+<div class="subtitle">CYBERPUNK STREET RACING</div>
+
+<div id="gameBox">
+  <canvas id="game" width="480" height="640"></canvas>
+
+  <div id="hud">
+    <div class="panel">
+      SCORE: <span id="score">0</span><br>
+      BEST: <span id="best">0</span><br>
+      LEVEL: <span id="level">1</span><br>
+      SPEED: <span id="speed">80</span> km/j
+    </div>
+
+    <div class="panel" style="text-align:right">
+      ❤️ <span id="lives">3</span><br>
+      🪙 <span id="coins">0</span><br>
+      🛡️ <span id="shield">OFF</span>
+    </div>
+  </div>
+
+  <div id="overlay">
+    <div class="card">
+      <h2 id="overlayTitle">NEON MAYHEM</h2>
+
+      <p id="overlayText">
+        Taklukkan jalanan! Hindari motor musuh,
+        kumpulkan koin, gunakan nitro, dan hindari polisi!
+      </p>
+
+      <p>
+        🏍️ 5 DESAIN MOTOR<br>
+        🗺️ 4 PILIHAN MAP<br>
+        ⚡ TURBO NITRO<br>
+        🛡️ POWER-UP<br>
+        🚔 POLISI PENGEJAR
+      </p>
+
+      <button class="mainBtn" id="motorBtn">🏍️ GARASI & PILIH MAP</button>
+      <button class="mainBtn" id="startBtn">MULAI BALAPAN 🚀</button>
+    </div>
+  </div>
+</div>
+
+<div id="garage" class="hidden">
+  <div class="garageCard">
+    <h2>🏍️ NEON GARAGE</h2>
+
+    <div id="motorName">CYAN PHANTOM</div>
+    <div id="motorType">SUPERBIKE</div>
+
+    <canvas id="motorPreview" width="320" height="240"></canvas>
+
+    <div id="motorDescription"></div>
+
+    <div class="garageButtons">
+      <button id="prevMotor">◀ MOTOR</button>
+      <button id="nextMotor">MOTOR ▶</button>
+    </div>
+
+    <div class="mapSelector">
+      <h3>🗺️ PILIH MAP</h3>
+      <div id="mapName"></div>
+      <div id="mapDescription"></div>
+
+      <div class="garageButtons">
+        <button id="prevMap">◀ MAP</button>
+        <button id="nextMap">MAP ▶</button>
+      </div>
+    </div>
+
+    <button class="mainBtn" id="selectMotor">SIMPAN PILIHAN ✓</button>
+    <button class="mainBtn" id="backGarage">KEMBALI</button>
+  </div>
+</div>
+
+<div id="controls">
+  <button class="controlBtn" id="leftBtn">◀</button>
+  <button class="controlBtn" id="nitroBtn">⚡ NITRO</button>
+  <button class="controlBtn" id="rightBtn">▶</button>
+</div>
+
+<div id="hint">
+  HP: gunakan tombol layar | PC: ← → dan SPACE untuk nitro
+</div>
+
+<!-- Menghubungkan file JavaScript eksternal -->
+<script src="script.js"></script>
+
+</body>
+</html>
